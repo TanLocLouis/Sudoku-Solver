@@ -47,23 +47,28 @@ void sendKeyUp(unsigned char keyCode)
     SendInput(1, &input, sizeof(INPUT));
 }
 
-void show(vector<vector<int>>& board) { // show board
+void autofill(vector<vector<int>>& board) { // show board
+	cout << "----------Answer-----------" <<  endl;
 	for (int i = 0; i < size; i++) {
 		for (int j = 0; j < size; j++) cout << board[i][j] << char(32);
 		cout << endl;
 	}
-	cout << "-----------------------" <<  endl;
+	cout << "Autofill in 10s" << endl;
 	Sleep(10000);
 	
+	cout << "----------Filling----------" <<  endl;
 	for (int i = 0; i < size; i++) {
 		for (int j = 0; j < size; j++) {
 			char c = char(board[i][j] + 48);
 			sendKeyDown(c);
 			sendKeyUp(c);
+			cout << board[i][j] << char(32);
 			sendKeyDown(VK_RIGHT);
 			sendKeyUp(VK_RIGHT);
-			Sleep(200);
+			Sleep(100);
 		}
+		
+		cout << endl;
 		sendKeyDown(VK_DOWN);
 		sendKeyUp(VK_DOWN);
 		for (int k = 1; k <= 8; k++) {
@@ -71,16 +76,16 @@ void show(vector<vector<int>>& board) { // show board
 			sendKeyUp(VK_LEFT);
 		}
 	}
-	
+	cout << "Win!!!";
+	Sleep(5000);
 }
 
 void solve(int cell, vector<vector<int>>& board) {
 	if (cell == 81) {
-		show(board);
+		autofill(board);
 		return;
 	}
-	//cout << cell << endl;
-	//show(board);
+	
 	int x = cell / 9;
 	int y = cell % 9;
 	
@@ -108,6 +113,8 @@ void input(vector<vector<int>>& board) {
 int main() {
 	vector<vector<int>> board(size, vector<int>(size, 0));
 	
+	cout << "/----------Sudoku Solver----------/" << endl;
+	cout << "/----------TanLocLouis------------/" << endl;
 	input(board);
 	solve(0, board);
 	return 0;
