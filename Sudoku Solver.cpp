@@ -4,6 +4,7 @@
 using namespace std;
 
 const int size = 9;
+int cnt = 0;
 
 bool check(int x, int y, int num, vector<vector<int>>& board) {
 	for (int i = 0; i < size; i++) // check row
@@ -49,6 +50,7 @@ void sendKeyUp(unsigned char keyCode)
 
 void autofill(vector<vector<int>>& board) { // show board
 	cout << "----------Answer-----------" <<  endl;
+	cout << "After " << cnt << " caculations" << endl;
 	for (int i = 0; i < size; i++) {
 		for (int j = 0; j < size; j++) cout << board[i][j] << char(32);
 		cout << endl;
@@ -58,11 +60,17 @@ void autofill(vector<vector<int>>& board) { // show board
 	
 	cout << "----------Filling----------" <<  endl;
 	for (int i = 0; i < size; i++) {
+		if (i % 3 == 0)
+			cout << "------------------------------" << endl;
+		
 		for (int j = 0; j < size; j++) {
 			char c = char(board[i][j] + 48);
 			sendKeyDown(c);
 			sendKeyUp(c);
+			
+			if (j % 3 == 0) cout << " | ";
 			cout << board[i][j] << char(32);
+			
 			sendKeyDown(VK_RIGHT);
 			sendKeyUp(VK_RIGHT);
 			Sleep(100);
@@ -77,7 +85,7 @@ void autofill(vector<vector<int>>& board) { // show board
 		}
 	}
 	cout << "Win!!!";
-	Sleep(5000);
+	Sleep(20000);
 }
 
 void solve(int cell, vector<vector<int>>& board) {
@@ -85,6 +93,8 @@ void solve(int cell, vector<vector<int>>& board) {
 		autofill(board);
 		return;
 	}
+	
+	cnt++;
 	
 	int x = cell / 9;
 	int y = cell % 9;
